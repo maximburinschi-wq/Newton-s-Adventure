@@ -21,6 +21,14 @@ body.castle-library-theme {
   align-items: center;
 }
 
+body {
+    background-image: url('Солнечная библиотека замка.png');
+    background-size: cover;          /* Растягивает фон на весь экран */
+    background-position: center;     /* Центрирует изображение */
+    background-repeat: no-repeat;    /* Отключает размножение плитки */
+    background-attachment: fixed;    /* Фиксирует при прокрутке */
+}
+
 /* ==========================================================================
    МЕСТО ДЛЯ КАРТИНКИ ФОНА:
    Положите ваше изображение (например, castle-library.png) в папку с проектом.
