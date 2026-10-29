@@ -33,7 +33,7 @@ body.castle-library-theme {
   width: 100%;
   height: 100%;
   background: linear-gradient(rgba(15, 10, 6, 0.35), rgba(15, 10, 6, 0.55)), 
-              url('C:\\Teme Pentru Scoala (TPS)\\Fizica\\Newton Adventure\\Солнечная библиотека замка.png') no-repeat center center;
+              url('Солнечная библиотека замка.png') no-repeat center center;
   background-size: cover;
   z-index: 1;
   filter: brightness(0.9);
