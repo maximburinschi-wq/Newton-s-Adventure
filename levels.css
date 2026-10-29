@@ -1,0 +1,155 @@
+/* ==========================================================================
+   СТИЛИ КАРТЫ УРОВНЕЙ (levels.css)
+   ========================================================================== */
+
+.levels-grid-container {
+  width: 100%;
+  max-width: 800px;
+  max-height: 60vh;
+  overflow-y: auto;
+  margin: auto 0;
+  z-index: 5;
+  padding: 5px;
+}
+
+.levels-grid {
+  display: grid;
+  grid-template-columns: repeat(2, 1fr);
+  gap: 16px;
+}
+
+.level-card {
+  background: rgba(25, 16, 8, 0.88);
+  border: 1px solid rgba(253, 224, 71, 0.25);
+  border-radius: 18px;
+  padding: 18px 20px;
+  display: flex;
+  align-items: center;
+  gap: 16px;
+  cursor: pointer;
+  transition: all 0.3s ease;
+  box-shadow: 0 10px 25px rgba(0, 0, 0, 0.6);
+  backdrop-filter: blur(10px);
+  position: relative;
+  overflow: hidden;
+}
+
+/* Открытый уровень */
+.level-card.unlocked {
+  border-color: rgba(253, 224, 71, 0.6);
+}
+
+.level-card.unlocked:hover {
+  transform: translateY(-4px);
+  border-color: #fde047;
+  box-shadow: 0 15px 30px rgba(253, 224, 71, 0.25);
+  background: rgba(40, 26, 13, 0.95);
+}
+
+.level-card.unlocked .level-number {
+  background: linear-gradient(135deg, #f59e0b, #d97706);
+  color: #fff;
+  border: 1px solid rgba(253, 224, 71, 0.5);
+  box-shadow: 0 4px 15px rgba(245, 158, 11, 0.4);
+}
+
+.level-card.unlocked .level-status {
+  color: #fde047;
+  font-size: 1.2rem;
+}
+
+/* Заблокированный уровень */
+.level-card.locked {
+  opacity: 0.55;
+  cursor: not-allowed;
+  border-color: rgba(255, 255, 255, 0.08);
+}
+
+.level-card.locked:hover {
+  transform: none;
+}
+
+.level-card.locked .level-number {
+  background: rgba(255, 255, 255, 0.05);
+  color: #94a3b8;
+  border: 1px solid rgba(255, 255, 255, 0.1);
+  box-shadow: none;
+}
+
+/* Общие стили элементов карточки */
+.level-number {
+  width: 48px;
+  height: 48px;
+  min-width: 48px;
+  border-radius: 14px;
+  display: grid;
+  place-items: center;
+  font-family: "Fredoka", sans-serif;
+  font-size: 1.3rem;
+  font-weight: 700;
+}
+
+.level-info {
+  flex: 1;
+}
+
+.level-info h3 {
+  font-family: "Fredoka", sans-serif;
+  font-size: 1.1rem;
+  color: #fde047;
+  margin: 0 0 3px 0;
+}
+
+.level-info p {
+  font-size: 0.8rem;
+  color: #cbd5e1;
+  margin: 0;
+  line-height: 1.3;
+}
+
+.level-arrow {
+  color: #fde047;
+  font-size: 0.9rem;
+  opacity: 0.8;
+  transition: transform 0.2s;
+}
+
+.level-card.unlocked:hover .level-arrow {
+  transform: translateX(3px);
+}
+
+.level-card.locked .level-arrow {
+  display: none;
+}
+
+/* Комфортный отступ для кнопки назад от копирайта */
+.wiki-back-container {
+  width: 100%;
+  display: flex;
+  justify-content: center;
+  z-index: 10;
+  margin: 20px 0 10px 0;
+}
+
+/* Адаптивность для мобильных */
+@media (max-width: 768px) {
+  .levels-grid {
+    grid-template-columns: 1fr;
+  }
+  .levels-grid-container {
+    max-height: 52vh;
+  }
+}
+
+/* Растягиваем 5-ю карточку (экзамен) на всю ширину сетки (по центру) */
+.levels-grid .level-card:nth-child(5) {
+  grid-column: span 2;
+  max-width: 100%;
+}
+
+/* На мобильных устройствах, где сетка становится в 1 колонку, возвращаем обычный размер */
+@media (max-width: 768px) {
+  .levels-grid .level-card:nth-child(5) {
+    grid-column: span 1;
+  }
+}

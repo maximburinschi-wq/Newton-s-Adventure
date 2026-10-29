@@ -1,0 +1,116 @@
+<!DOCTYPE html>
+<html lang="ro">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Newton's Adventure - Realizări</title>
+  <link rel="stylesheet" href="style.css">
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+  <link href="https://fonts.googleapis.com/css2?family=Fredoka:wght@400;600;700&family=Nunito:wght@700;800;900&display=swap" rel="stylesheet">
+  <link rel="icon" type="image/png" href="C:\Teme Pentru Scoala (TPS)\Fizica\Newton Adventure\Красное яблоко с золотым сиянием.png">
+  <style>
+    .trophies-container {
+      width: 100%; max-width: 750px;
+      background: rgba(25, 16, 8, 0.93);
+      border: 1px solid rgba(253, 224, 71, 0.3);
+      border-radius: 20px; padding: 30px;
+      margin: auto 0; z-index: 5;
+      box-shadow: 0 15px 35px rgba(0, 0, 0, 0.8);
+      backdrop-filter: blur(12px); text-align: center;
+      max-height: 60vh; overflow-y: auto;
+    }
+    .trophy-grid { display: flex; flex-direction: column; gap: 14px; margin-top: 20px; }
+    .trophy-card {
+      background: rgba(25, 16, 8, 0.85);
+      border: 1px solid rgba(253, 224, 71, 0.2);
+      border-radius: 16px; padding: 16px 20px;
+      display: flex; align-items: center; gap: 16px;
+      opacity: 0.5; transition: all 0.3s ease; text-align: left;
+    }
+    .trophy-card.unlocked {
+      opacity: 1; border-color: #fde047;
+      box-shadow: 0 5px 20px rgba(253, 224, 71, 0.25);
+      background: rgba(40, 26, 13, 0.95);
+    }
+    .trophy-icon {
+      width: 50px; height: 50px;
+      background: rgba(253, 224, 71, 0.1);
+      border-radius: 12px; display: grid; place-items: center;
+      color: #fde047; font-size: 1.4rem; flex-shrink: 0;
+    }
+    .trophy-info h3 {
+      font-family: "Fredoka", sans-serif; font-size: 1.1rem;
+      color: #fde047; margin-bottom: 4px;
+    }
+    .trophy-info p { font-size: 0.85rem; color: #cbd5e1; }
+  </style>
+</head>
+<body class="castle-library-theme">
+
+  <div class="library-bg"><div class="sunlight-rays"></div></div>
+  <div class="floating-formulas" id="formulasContainer"></div>
+
+  <main class="main-screen">
+    <header class="game-logo-container">
+      <div class="logo-badge">PREMII</div>
+      <h1 class="game-title">
+        <span class="word-newton">REALIZĂRILE</span>
+        <span class="word-adventure">CASTELULUI</span>
+      </h1>
+    </header>
+
+    <div class="trophies-container">
+      <div class="task-title" style="font-size: 1.3rem; margin-bottom: 5px;">Sala Trofeelor</div>
+      <div class="task-desc">Colectează premii pentru parcurgerea nivelurilor și examenele.</div>
+
+      <div class="trophy-grid">
+        <!-- 1-е достижение за прохождение всех 4 уровней -->
+        <div class="trophy-card locked" id="trophy-chapter_1">
+          <div class="trophy-icon"><i class="fa-solid fa-award"></i></div>
+          <div class="trophy-info">
+            <h3>Magistru de Cinematică și Forță</h3>
+            <p>Parcurge toate cele 4 niveluri principale</p>
+          </div>
+        </div>
+
+        <!-- 2-е достижение за итоговый тест -->
+        <div class="trophy-card locked" id="trophy-chapter_2">
+          <div class="trophy-icon"><i class="fa-solid fa-graduation-cap"></i></div>
+          <div class="trophy-info">
+            <h3>Marele Fizician</h3>
+            <p>Completează testul final cu 5 întrebări fără greșeli</p>
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <div class="wiki-back-container">
+      <button class="menu-btn btn-back" onclick="navigateTo('index.html')">
+        <div class="btn-icon"><i class="fa-solid fa-arrow-left"></i></div>
+        <div class="btn-text">
+          <span class="title">INAPOI</span>
+          <span class="subtitle">La ecranul principal</span>
+        </div>
+      </button>
+    </div>
+
+    <footer class="game-footer">
+      <span>V1.0.0 Copyright © 2026 Maxim Burinschi & Arina Aftanas. All rights reserved.</span>
+    </footer>
+  </main>
+
+  <script src="main.js"></script>
+  <script>
+    document.addEventListener("DOMContentLoaded", () => {
+      const achievements = JSON.parse(localStorage.getItem('unlockedAchievements') || '[]');
+      achievements.forEach(id => {
+        const trophyCard = document.getElementById(`trophy-${id}`);
+        if (trophyCard) {
+          trophyCard.classList.remove('locked');
+          trophyCard.classList.add('unlocked');
+        }
+      });
+    });
+  </script>
+</body>
+</html>

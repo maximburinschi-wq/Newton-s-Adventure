@@ -1,0 +1,226 @@
+/* ==========================================================================
+   ПОЛНЫЕ И ЕДИНЫЕ СТИЛИ ПРОЕКТА (style.css)
+   ========================================================================== */
+* {
+  box-sizing: border-box;
+  margin: 0;
+  padding: 0;
+}
+
+body.castle-library-theme {
+  margin: 0;
+  padding: 0;
+  width: 100vw;
+  height: 100vh;
+  overflow: hidden;
+  font-family: "Nunito", sans-serif;
+  background-color: #0f0a06;
+  color: #fff;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+}
+
+/* ==========================================================================
+   МЕСТО ДЛЯ КАРТИНКИ ФОНА:
+   Положите ваше изображение (например, castle-library.png) в папку с проектом.
+   Если картинка лежит в подпапке, укажите путь вот так: url('images/castle-library.png')
+   ========================================================================== */
+.library-bg {
+  position: absolute;
+  top: 0;
+  left: 0;
+  width: 100%;
+  height: 100%;
+  background: linear-gradient(rgba(15, 10, 6, 0.35), rgba(15, 10, 6, 0.55)), 
+              url('C:\\Teme Pentru Scoala (TPS)\\Fizica\\Newton Adventure\\Солнечная библиотека замка.png') no-repeat center center;
+  background-size: cover;
+  z-index: 1;
+  filter: brightness(0.9);
+}
+
+.sunlight-rays {
+  position: absolute;
+  top: 0;
+  left: 0;
+  width: 100%;
+  height: 100%;
+  background: radial-gradient(circle at 20% 30%, rgba(253, 224, 71, 0.15) 0%, transparent 60%);
+  pointer-events: none;
+  z-index: 2;
+}
+
+/* Контейнер для плавающих формул на фоне */
+.floating-formulas {
+  position: absolute;
+  top: 0;
+  left: 0;
+  width: 100%;
+  height: 100%;
+  pointer-events: none;
+  overflow: hidden;
+  z-index: 3;
+}
+
+.formula-item {
+  position: absolute;
+  bottom: -50px;
+  color: rgba(253, 224, 71, 0.25);
+  font-family: "Fredoka", sans-serif;
+  font-weight: 600;
+  user-select: none;
+  animation: floatUpAndFade linear infinite;
+  white-space: nowrap;
+}
+
+@keyframes floatUpAndFade {
+  0% {
+    transform: translateY(0) scale(0.9);
+    opacity: 0;
+  }
+  15% {
+    opacity: 0.35;
+  }
+  85% {
+    opacity: 0.35;
+  }
+  100% {
+    transform: translateY(-105vh) scale(1.1);
+    opacity: 0;
+  }
+}
+
+/* Единая жесткая сетка для всех внутренних экранов */
+.main-screen {
+  position: relative;
+  z-index: 5;
+  width: 100%;
+  max-width: 1100px;
+  height: 100vh;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: space-between;
+  padding: 30px 20px 20px 20px;
+}
+
+/* Шапка сайта / Заголовки */
+.game-logo-container {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  margin-top: 5px;
+  flex-shrink: 0;
+}
+
+.logo-badge {
+  background: linear-gradient(135deg, #f59e0b, #d97706);
+  color: #fff;
+  font-family: "Fredoka", sans-serif;
+  font-size: 0.75rem;
+  font-weight: 700;
+  padding: 4px 14px;
+  border-radius: 20px;
+  text-transform: uppercase;
+  letter-spacing: 1.5px;
+  margin-bottom: 6px;
+  box-shadow: 0 4px 12px rgba(245, 158, 11, 0.4);
+}
+
+.game-title {
+  font-family: "Fredoka", sans-serif;
+  font-size: 2.2rem;
+  font-weight: 700;
+  text-align: center;
+  line-height: 1.1;
+  text-shadow: 0 4px 15px rgba(0, 0, 0, 0.8);
+}
+
+.word-newton {
+  color: #ffffff;
+}
+
+.word-adventure {
+  color: #fde047;
+}
+
+/* Универсальный блок для кнопки «Назад» */
+.wiki-back-container {
+  width: 100%;
+  display: flex;
+  justify-content: center;
+  flex-shrink: 0;
+  margin: 15px 0 10px 0;
+}
+
+/* Нижний фиксированный копирайт (в старом минималистичном стиле) */
+.game-footer {
+  width: 100%;
+  text-align: center;
+  font-size: 0.75rem;
+  color: #fde047;
+  opacity: 0.85;
+  flex-shrink: 0;
+  padding: 10px 0;
+  background: transparent;
+  border-top: none;
+  backdrop-filter: none;
+}
+
+/* Универсальные стили кнопок меню */
+.menu-btn {
+  background: rgba(25, 16, 8, 0.85);
+  border: 1px solid rgba(253, 224, 71, 0.35);
+  border-radius: 16px;
+  padding: 12px 20px;
+  display: flex;
+  align-items: center;
+  gap: 16px;
+  cursor: pointer;
+  transition: all 0.25s ease;
+  box-shadow: 0 8px 20px rgba(0, 0, 0, 0.5);
+  backdrop-filter: blur(8px);
+  text-decoration: none;
+}
+
+.menu-btn:hover {
+  transform: translateY(-3px);
+  border-color: #fde047;
+  background: rgba(40, 26, 13, 0.95);
+  box-shadow: 0 12px 25px rgba(253, 224, 71, 0.25);
+}
+
+.btn-icon {
+  width: 44px;
+  height: 44px;
+  background: rgba(253, 224, 71, 0.1);
+  border: 1px solid rgba(253, 224, 71, 0.3);
+  border-radius: 12px;
+  display: grid;
+  place-items: center;
+  color: #fde047;
+  font-size: 1.2rem;
+}
+
+.btn-text {
+  display: flex;
+  flex-direction: column;
+  text-align: left;
+}
+
+.btn-text .title {
+  font-family: "Fredoka", sans-serif;
+  font-size: 1.1rem;
+  font-weight: 700;
+  color: #ffffff;
+  line-height: 1.2;
+}
+
+.btn-text .subtitle {
+  font-size: 0.75rem;
+  color: #cbd5e1;
+}
+
+.btn-back {
+  padding: 10px 24px;
+}

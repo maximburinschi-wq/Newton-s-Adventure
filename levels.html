@@ -1,0 +1,114 @@
+<!DOCTYPE html>
+<html lang="ro">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Newton's Adventure - Harta nivelurilor</title>
+  <link rel="stylesheet" href="style.css">
+  <link rel="stylesheet" href="levels.css"> <!-- Убедитесь, что этот файл подключен -->
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+  <link href="https://fonts.googleapis.com/css2?family=Fredoka:wght@400;600;700&family=Nunito:wght@700;800;900&display=swap" rel="stylesheet">
+  <link rel="icon" type="image/png" href="C:\Teme Pentru Scoala (TPS)\Fizica\Newton Adventure\Красное яблоко с золотым сиянием.png">
+</head>
+<body class="castle-library-theme">
+
+  <div class="library-bg">
+    <div class="sunlight-rays"></div>
+  </div>
+
+  <div class="floating-formulas" id="formulasContainer"></div>
+
+  <main class="main-screen">
+    <header class="game-logo-container">
+      <div class="logo-badge">AVENTURA</div>
+      <h1 class="game-title">
+        <span class="word-newton">HARTA</span>
+        <span class="word-adventure">NIVELURILOR</span>
+      </h1>
+    </header>
+
+    <!-- Обертка для корректной сетки -->
+    <div class="levels-grid-container">
+      <div class="levels-grid" id="levelsGridContainer">
+        <!-- Уровень 1 -->
+        <div class="level-card unlocked" id="lvl-1" onclick="startLevel(1)">
+          <div class="level-number">1</div>
+          <div class="level-info">
+            <h3>Sala kinematicii</h3>
+            <p>Basele mișcării și vitezei</p>
+          </div>
+          <div class="level-arrow"><i class="fa-solid fa-play"></i></div>
+        </div>
+
+        <!-- Уровень 2 -->
+        <div class="level-card locked" id="lvl-2" onclick="startLevel(2)">
+          <div class="level-number"><i class="fa-solid fa-lock"></i></div>
+          <div class="level-info">
+            <h3>Turnul Legilor lui Newton</h3>
+            <p>Forțele, masa și accelerația</p>
+          </div>
+          <div class="level-arrow"><i class="fa-solid fa-play"></i></div>
+        </div>
+
+        <!-- Уровень 3 -->
+        <div class="level-card locked" id="lvl-3" onclick="startLevel(3)">
+          <div class="level-number"><i class="fa-solid fa-lock"></i></div>
+          <div class="level-info">
+            <h3>Biblioteca Gravitației</h3>
+            <p>Gravitația universală și orbitele</p>
+          </div>
+          <div class="level-arrow"><i class="fa-solid fa-play"></i></div>
+        </div>
+
+        <!-- Уровень 4 -->
+        <div class="level-card locked" id="lvl-4" onclick="startLevel(4)">
+          <div class="level-number"><i class="fa-solid fa-lock"></i></div>
+          <div class="level-info">
+            <h3>Mansarda Energiei</h3>
+            <p>Lucrul, puterea și legea conservării</p>
+          </div>
+          <div class="level-arrow"><i class="fa-solid fa-play"></i></div>
+        </div>
+      </div>
+    </div>
+
+    <div class="wiki-back-container">
+      <button class="menu-btn btn-back" onclick="navigateTo('index.html')">
+        <div class="btn-icon"><i class="fa-solid fa-arrow-left"></i></div>
+        <div class="btn-text">
+          <span class="title">INAPOI</span>
+          <span class="subtitle">La ecranul principal</span>
+        </div>
+      </button>
+    </div>
+
+    <footer class="game-footer">
+     V1.0.0 Copyright © 2026 Maxim Burinschi & Arina Aftanas. All rights reserved.
+    </footer>
+  </main>
+
+  <script src="main.js"></script>
+  <script>
+    document.addEventListener("DOMContentLoaded", () => {
+      const maxLevel = parseInt(localStorage.getItem('maxUnlockedLevel') || '1', 10);
+      const grid = document.getElementById('levelsGridContainer');
+
+      if (maxLevel >= 5 && !document.getElementById('lvl-5')) {
+        const testCard = document.createElement('div');
+        testCard.className = 'level-card unlocked';
+        testCard.id = 'lvl-5';
+        testCard.onclick = () => startLevel(5);
+        testCard.innerHTML = `
+          <div class="level-number" style="background: linear-gradient(135deg, #22c55e, #16a34a);"><i class="fa-solid fa-graduation-cap"></i></div>
+          <div class="level-info">
+            <h3>Examenul Final</h3>
+            <p>Test din 5 întrebări despre fizică</p>
+          </div>
+          <div class="level-arrow"><i class="fa-solid fa-play"></i></div>
+        `;
+        grid.appendChild(testCard);
+      }
+    });
+  </script>
+</body>
+</html>

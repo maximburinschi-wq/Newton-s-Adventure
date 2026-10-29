@@ -1,0 +1,238 @@
+<!DOCTYPE html>
+<html lang="ro">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Newton's Adventure - Setări</title>
+  <link rel="stylesheet" href="style.css">
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+  <link href="https://fonts.googleapis.com/css2?family=Fredoka:wght@400;600;700&family=Nunito:wght@700;800;900&display=swap" rel="stylesheet">
+  <link rel="icon" type="image/png" href="C:\Teme Pentru Scoala (TPS)\Fizica\Newton Adventure\Красное яблоко с золотым сиянием.png">
+  <style>
+    .settings-container {
+      width: 100%;
+      max-width: 650px;
+      background: rgba(25, 16, 8, 0.93);
+      border: 1px solid rgba(253, 224, 71, 0.3);
+      border-radius: 20px;
+      padding: 30px;
+      margin: auto 0;
+      z-index: 5;
+      box-shadow: 0 15px 35px rgba(0, 0, 0, 0.8);
+      backdrop-filter: blur(12px);
+      text-align: center;
+    }
+    .setting-group {
+      background: rgba(0, 0, 0, 0.3);
+      border: 1px dashed rgba(253, 224, 71, 0.2);
+      border-radius: 14px;
+      padding: 18px;
+      margin-bottom: 20px;
+      display: flex;
+      flex-direction: column;
+      gap: 12px;
+    }
+    .setting-row {
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+    }
+    .setting-label {
+      font-family: "Fredoka", sans-serif;
+      font-size: 1.1rem;
+      color: #fde047;
+    }
+    .toggle-btn {
+      background: rgba(255, 255, 255, 0.1);
+      border: 1px solid rgba(253, 224, 71, 0.4);
+      color: #fff;
+      padding: 8px 20px;
+      border-radius: 10px;
+      font-family: "Fredoka", sans-serif;
+      cursor: pointer;
+      transition: all 0.2s;
+    }
+    .toggle-btn.active {
+      background: #fde047;
+      color: #1e130a;
+      font-weight: bold;
+    }
+    .range-slider {
+      width: 100%;
+      accent-color: #fde047;
+      cursor: pointer;
+    }
+    .reset-btn {
+      background: rgba(239, 68, 68, 0.15);
+      border: 1px solid rgba(239, 68, 68, 0.4);
+      color: #f87171;
+      padding: 12px;
+      border-radius: 12px;
+      font-family: "Fredoka", sans-serif;
+      font-size: 1rem;
+      cursor: pointer;
+      transition: all 0.2s;
+      width: 100%;
+    }
+    .reset-btn:hover {
+      background: rgba(239, 68, 68, 0.3);
+      border-color: #ef4444;
+      color: #fff;
+      transform: translateY(-2px);
+    }
+
+    /* Кастомная модальная карточка вместо системного confirm */
+    .custom-modal-overlay {
+      position: fixed;
+      top: 0; left: 0; width: 100%; height: 100%;
+      background: rgba(0, 0, 0, 0.75);
+      backdrop-filter: blur(5px);
+      display: flex;
+      justify-content: center;
+      align-items: center;
+      z-index: 100;
+      opacity: 0;
+      pointer-events: none;
+      transition: all 0.3s ease;
+    }
+    .custom-modal-overlay.show {
+      opacity: 1;
+      pointer-events: auto;
+    }
+    .custom-modal {
+      background: rgba(25, 16, 8, 0.96);
+      border: 1px solid rgba(253, 224, 71, 0.4);
+      border-radius: 20px;
+      padding: 30px;
+      max-width: 420px;
+      width: 90%;
+      text-align: center;
+      box-shadow: 0 20px 40px rgba(0,0,0,0.9);
+      transform: translateY(-20px);
+      transition: transform 0.3s ease;
+    }
+    .custom-modal-overlay.show .custom-modal {
+      transform: translateY(0);
+    }
+    .custom-modal h3 {
+      font-family: "Fredoka", sans-serif;
+      font-size: 1.3rem;
+      color: #fde047;
+      margin-bottom: 10px;
+    }
+    .custom-modal p {
+      font-size: 0.95rem;
+      color: #cbd5e1;
+      margin-bottom: 20px;
+      line-height: 1.4;
+    }
+    .modal-btns {
+      display: flex;
+      gap: 12px;
+      justify-content: center;
+    }
+    .modal-btn {
+      padding: 10px 24px;
+      border-radius: 12px;
+      font-family: "Fredoka", sans-serif;
+      font-size: 1rem;
+      cursor: pointer;
+      border: none;
+      transition: all 0.2s;
+    }
+    .modal-btn.confirm {
+      background: linear-gradient(135deg, #ef4444, #dc2626);
+      color: #fff;
+      box-shadow: 0 4px 15px rgba(239, 68, 68, 0.4);
+    }
+    .modal-btn.confirm:hover {
+      transform: scale(1.05);
+    }
+    .modal-btn.cancel {
+      background: rgba(255, 255, 255, 0.1);
+      color: #fff;
+      border: 1px solid rgba(253, 224, 71, 0.3);
+    }
+    .modal-btn.cancel:hover {
+      background: rgba(255, 255, 255, 0.2);
+    }
+  </style>
+</head>
+<body class="castle-library-theme">
+
+  <div class="library-bg">
+    <div class="sunlight-rays"></div>
+  </div>
+
+  <div class="floating-formulas" id="formulasContainer"></div>
+
+  <main class="main-screen">
+    <header class="game-logo-container">
+      <div class="logo-badge">PARAMETRI</div>
+      <h1 class="game-title">
+        <span class="word-newton">SETĂRILE</span>
+        <span class="word-adventure">JOCULUI</span>
+      </h1>
+    </header>
+
+    <div class="settings-container">
+      <!-- Музыка -->
+      <div class="setting-group">
+        <div class="setting-row">
+          <span class="setting-label"><i class="fa-solid fa-music"></i> Muzică de fundal</span>
+          <button id="musicToggleBtn" class="toggle-btn" onclick="toggleMusic()">Activează</button>
+        </div>
+        <input type="range" id="musicVolume" min="0" max="1" step="0.05" class="range-slider">
+      </div>
+
+      <!-- Звуковые эффекты -->
+      <div class="setting-group">
+        <div class="setting-row">
+          <span class="setting-label"><i class="fa-solid fa-volume-high"></i> Sunet de click</span>
+          <button id="sfxToggleBtn" class="toggle-btn" onclick="toggleSfx()">Activează</button>
+        </div>
+        <input type="range" id="sfxVolume" min="0" max="1" step="0.05" class="range-slider">
+      </div>
+
+      <!-- Сброс прогресса -->
+      <div class="setting-group" style="border-color: rgba(239, 68, 68, 0.3);">
+        <div class="setting-row" style="margin-bottom: 5px;">
+          <span class="setting-label" style="color: #f87171;"><i class="fa-solid fa-triangle-exclamation"></i> Resetează progresul</span>
+        </div>
+        <p style="font-size: 0.85rem; color: #cbd5e1; text-align: left; margin-bottom: 10px;">
+          Va șterge toate nivelurile deschise și realizările obținute. Acțiunea este ireversibilă!
+        </p>
+        <button class="reset-btn" onclick="resetGameProgress()">Resetează</button>
+      </div>
+    </div>
+
+    <div class="wiki-back-container">
+      <button class="menu-btn btn-back" onclick="navigateTo('index.html')">
+        <div class="btn-icon"><i class="fa-solid fa-arrow-left"></i></div>
+        <div class="btn-text">
+          <span class="title">INAPOI</span>
+          <span class="subtitle">La ecranul principal</span>
+        </div>
+      </button>
+    </div>
+
+    <footer class="game-footer">
+     V1.0.0 Copyright © 2026 Maxim Burinschi & Arina Aftanas. All rights reserved.
+    </footer>
+  </main>
+
+  <!-- Кастомное модальное окно сброса -->
+  <div class="custom-modal-overlay" id="resetModal">
+    <div class="custom-modal">
+      <h3>Resetează progresul</h3>
+      <p>Esti sigur că vrei să resetezi întregul progres al jocului și realizările obținute?</p>
+      <div class="modal-btns">
+        <button class="modal-btn cancel" onclick="closeResetModal()">Anulează</button>
+        <button class="modal-btn confirm" onclick="executeResetProgress()">Resetează</button>
+      </div>
+    </div>
+  </div>
+
+  <script src="main.js"></script>
+</body>
+</html>

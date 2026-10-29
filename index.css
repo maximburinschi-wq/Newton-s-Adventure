@@ -1,0 +1,205 @@
+/* ==========================================================================
+   СТИЛИ ДЛЯ ГЛАВНОГО ЭКРАНА (index.html) - Крупный персонаж и резкий срез
+   ========================================================================== */
+.content-wrapper {
+  width: 100%;
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  margin: auto 0;
+}
+
+.left-hero {
+  flex: 1;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  position: relative;
+}
+
+/* Увеличиваем общую сцену персонажа */
+.newton-stage {
+  position: relative;
+  width: 640px;
+  height: 640px;
+  display: flex;
+  justify-content: center;
+  align-items: flex-end;
+  margin-bottom: -80px;
+}
+
+.hero-glow {
+  position: absolute;
+  width: 480px;
+  height: 480px;
+  bottom: 20px;
+  background: radial-gradient(
+    circle,
+    rgba(217, 119, 6, 0.35) 0%,
+    rgba(0, 0, 0, 0) 70%
+  );
+  border-radius: 50%;
+  filter: blur(30px);
+}
+
+/* Делаем персонажа значительно крупнее */
+.newton-character-hd {
+  width: 600px;
+  height: 600px;
+  z-index: 2;
+  display: flex;
+  justify-content: center;
+  align-items: flex-end;
+  filter: drop-shadow(0 15px 25px rgba(0, 0, 0, 0.8));
+  
+  /* Быстрый, резкий градиент прозрачности снизу (интервал от 82% до 94%) */
+  -webkit-mask-image: linear-gradient(to bottom, rgba(0,0,0,1) 82%, rgba(0,0,0,0) 94%);
+  mask-image: linear-gradient(to bottom, rgba(0,0,0,1) 82%, rgba(0,0,0,0) 94%);
+}
+
+.newton-portrait {
+  width: 100%;
+  height: 100%;
+  object-fit: contain;
+  object-position: bottom center;
+}
+
+/* Масштабируем и позиционируем яблоко точно над увеличенной рукой */
+.floating-apple-container {
+  position: absolute;
+  bottom: 265px;
+  right: 140px;
+  z-index: 3;
+  animation: appleLevitate 3s ease-in-out infinite alternate;
+}
+
+@keyframes appleLevitate {
+  0% { transform: translateY(0px) scale(1); }
+  100% { transform: translateY(-16px) scale(1.08); }
+}
+
+.levitating-apple-img {
+  width: 110px;
+  height: 110px;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  filter: drop-shadow(0 0 20px rgba(239, 68, 68, 0.95));
+}
+
+.levitating-apple-img img {
+  width: 100%;
+  height: 100%;
+  object-fit: contain;
+}
+
+.right-menu {
+  flex: 1;
+  max-width: 420px;
+  display: flex;
+  justify-content: center;
+}
+
+.menu-navigation {
+  width: 100%;
+  display: flex;
+  flex-direction: column;
+  gap: 16px;
+}
+
+.menu-btn {
+  position: relative;
+  background: rgba(30, 20, 10, 0.75);
+  border: 2px solid rgba(253, 224, 71, 0.15);
+  backdrop-filter: blur(12px);
+  padding: 14px 24px;
+  border-radius: 16px;
+  display: flex;
+  align-items: center;
+  gap: 20px;
+  cursor: pointer;
+  overflow: hidden;
+  transition: all 0.3s cubic-bezier(0.34, 1.56, 0.64, 1);
+  box-shadow: 0 8px 20px rgba(0, 0, 0, 0.5);
+}
+
+.btn-icon {
+  width: 48px;
+  height: 48px;
+  border-radius: 12px;
+  background: rgba(255, 255, 255, 0.05);
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  font-size: 1.4rem;
+  color: #f59e0b;
+  transition: all 0.3s ease;
+}
+
+.btn-text {
+  display: flex;
+  flex-direction: column;
+  align-items: flex-start;
+}
+
+.btn-text .title {
+  font-family: "Fredoka", sans-serif;
+  font-size: 1.4rem;
+  color: #ffffff;
+  letter-spacing: 1px;
+}
+
+.btn-text .subtitle {
+  font-size: 0.8rem;
+  color: #cbd5e1;
+  font-weight: 600;
+}
+
+.btn-glow {
+  position: absolute;
+  inset: 0;
+  background: radial-gradient(
+    circle at var(--mouse-x, 50%) var(--mouse-y, 50%),
+    rgba(255, 255, 255, 0.15) 0%,
+    transparent 80%
+  );
+  opacity: 0;
+  transition: opacity 0.3s ease;
+}
+
+.btn-play:hover {
+  border-color: #22c55e;
+  transform: translateX(10px) scale(1.02);
+  box-shadow: 0 10px 25px rgba(34, 197, 94, 0.4);
+}
+.btn-play:hover .btn-icon { background: #22c55e; color: #fff; }
+
+.btn-trophies:hover {
+  border-color: #eab308;
+  transform: translateX(10px) scale(1.02);
+  box-shadow: 0 10px 25px rgba(234, 179, 8, 0.4);
+}
+.btn-trophies:hover .btn-icon { background: #eab308; color: #fff; }
+
+.btn-encyclopedia:hover {
+  border-color: #a855f7;
+  transform: translateX(10px) scale(1.02);
+  box-shadow: 0 10px 25px rgba(168, 85, 247, 0.4);
+}
+.btn-encyclopedia:hover .btn-icon { background: #a855f7; color: #fff; }
+
+.btn-settings:hover {
+  border-color: #3b82f6;
+  transform: translateX(10px) scale(1.02);
+  box-shadow: 0 10px 25px rgba(59, 130, 246, 0.4);
+}
+.btn-settings:hover .btn-icon { background: #3b82f6; color: #fff; }
+
+.menu-btn:hover .btn-glow { opacity: 1; }
+.menu-btn:active { transform: translateX(5px) scale(0.98); }
+
+@media (max-width: 900px) {
+  .content-wrapper { flex-direction: column; gap: 20px; }
+  .game-title { font-size: 2.8rem; }
+  .right-menu { width: 100%; }
+}

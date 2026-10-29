@@ -1,0 +1,150 @@
+<html lang="ro">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Newton's Adventure</title>
+    <link rel="stylesheet" href="style.css" />
+    <link rel="stylesheet" href="index.css" />
+    <link rel="icon" type="image/png" href="C:\Teme Pentru Scoala (TPS)\Fizica\Newton Adventure\Красное яблоко с золотым сиянием.png">
+    <!-- Подключение иконкового шрифта (FontAwesome) -->
+    <link
+      rel="stylesheet"
+      href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css"
+    />
+    <link
+      href="https://fonts.googleapis.com/css2?family=Fredoka:wght@400;600;700&family=Nunito:wght@700;800;900&display=swap"
+      rel="stylesheet"
+    />
+    
+  </head>
+  <body class="castle-library-theme">
+    <!-- Задний фон: солнечная библиотека замка -->
+    <div class="library-bg">
+      <div class="sunlight-rays"></div>
+    </div>
+
+    <!-- Контейнер левитирующих формул -->
+    <div class="floating-formulas" id="formulasContainer"></div>
+
+    <!-- Главный контейнер меню -->
+    <main class="main-screen">
+      <!-- ВЫВЕСКА (НАЗВАНИЕ ИГРЫ) -->
+      <header class="game-logo-container float-banner">
+        <div class="logo-badge">PHYSICS QUEST</div>
+        <h1 class="game-title">
+          <span class="word-newton">NEWTON'S</span>
+          <span class="word-adventure">ADVENTURE</span>
+        </h1>
+        <div class="logo-glow"></div>
+      </header>
+
+      <div class="content-wrapper">
+        <!-- ЛЕВАЯ ЧАСТЬ: Новый Исаак Ньютон и Левитирующее Яблоко в руке -->
+        <!-- ЛЕВАЯ ЧАСТЬ: Новый Исаак Ньютон и Левитирующее Яблоко в руке -->
+        <section class="left-hero">
+          <div class="newton-stage">
+            <!-- Аура / Свет вокруг персонажа -->
+            <div class="hero-glow"></div>
+
+            <!-- Левитирующее яблоко над протянутой рукой -->
+            <div class="floating-apple-container">
+              <div class="apple-energy-ring"></div>
+              <div class="levitating-apple-img">
+                <img
+                  src="Глянцевое красное яблоко с листом.png"
+                  alt="Яблоко"
+                  class="apple-portrait"
+                />
+              </div>
+              <div class="apple-sparkles">
+                <span></span><span></span><span></span>
+              </div>
+            </div>
+
+            <!-- Новый детализированный персонаж (Исаак Ньютон) -->
+            <div class="newton-character-hd">
+              <img
+                src="Аниме-портрет учёного с протянутой рукой.png"
+                alt="Исаак Ньютон"
+                class="newton-portrait"
+              />
+            </div>
+          </div>
+        </section>
+
+        <!-- ПРАВАЯ ЧАСТЬ: Игровое Меню -->
+        <section class="right-menu">
+          <nav class="menu-navigation">
+            <!-- Кнопка Играть -->
+            <button
+              class="menu-btn btn-play"
+              id="btnPlay"
+              onclick="navigateTo('levels.html')"
+            >
+              <div class="btn-icon"><i class="fa-solid fa-play"></i></div>
+              <div class="btn-text">
+                <span class="title">JOACA</span>
+                <span class="subtitle">Incepe aventura</span>
+              </div>
+              <div class="btn-glow"></div>
+            </button>
+
+            <!-- Кнопка Трофеи -->
+            <button
+              class="menu-btn btn-trophies"
+              id="btnTrophies"
+              onclick="navigateTo('C:\\Teme Pentru Scoala (TPS)\\Fizica\\Newton Adventure\\trophies.html')"
+            >
+              <div class="btn-icon"><i class="fa-solid fa-trophy"></i></div>
+              <div class="btn-text">
+                <span class="title">TROFEE</span>
+                <span class="subtitle">Dobite si recorduri</span>
+              </div>
+              <div class="btn-glow"></div>
+            </button>
+
+            <!-- Кнопка Физический Справочник -->
+            <button
+              class="menu-btn btn-encyclopedia"
+              id="btnEncyclopedia"
+              onclick="navigateTo('C:\\Teme Pentru Scoala (TPS)\\Fizica\\Newton Adventure\\wiki.html')"
+            >
+              <div class="btn-icon">
+                <i class="fa-solid fa-book-bookmark"></i>
+              </div>
+              <div class="btn-text">
+                <span class="title">FAQ</span>
+                <span class="subtitle">Legi si formule</span>
+              </div>
+              <div class="btn-glow"></div>
+            </button>
+
+            <!-- Кнопка Настройки -->
+            <button
+              class="menu-btn btn-settings"
+              id="btnSettings"
+              onclick="navigateTo('C:\\Teme Pentru Scoala (TPS)\\Fizica\\Newton Adventure\\settings.html')"
+            >
+              <div class="btn-icon"><i class="fa-solid fa-gear"></i></div>
+              <div class="btn-text">
+                <span class="title">SETARI</span>
+                <span class="subtitle">Sunet si control</span>
+              </div>
+              <div class="btn-glow"></div>
+            </button>
+          </nav>
+        </section>
+      </div>
+
+      <!-- Затемнение нижней зоны для контраста футера и персонажа -->
+      <div class="bottom-vignette"></div>
+
+      <!-- Футер / Версия -->
+      <footer class="game-footer">
+        <span>V1.0.0 Copyright © 2026 Maxim Burinschi & Arina Aftanas. All rights reserved.</span>
+      </footer>
+    </main>
+
+    <script src="main.js"></script>
+  </body>
+</html>

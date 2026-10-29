@@ -1,0 +1,668 @@
+<!DOCTYPE html>
+<html lang="ro">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Newton's Adventure - Testare</title>
+  <link rel="stylesheet" href="style.css">
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+  <link href="https://fonts.googleapis.com/css2?family=Fredoka:wght@400;600;700&family=Nunito:wght@700;800;900&display=swap" rel="stylesheet">
+  <link rel="icon" type="image/png" href="C:\Teme Pentru Scoala (TPS)\Fizica\Newton Adventure\Красное яблоко с золотым сиянием.png">
+  <style>
+    .game-arena {
+      width: 100%;
+      max-width: 800px;
+      background: rgba(25, 16, 8, 0.94);
+      border: 1px solid rgba(253, 224, 71, 0.35);
+      border-radius: 20px;
+      padding: 25px;
+      margin: auto 0;
+      z-index: 5;
+      box-shadow: 0 15px 35px rgba(0, 0, 0, 0.85);
+      backdrop-filter: blur(12px);
+      text-align: center;
+      position: relative;
+    }
+    .task-title {
+      font-family: "Fredoka", sans-serif;
+      font-size: 1.4rem;
+      color: #fde047;
+      margin-bottom: 6px;
+    }
+    .task-desc {
+      font-size: 0.9rem;
+      color: #cbd5e1;
+      margin-bottom: 12px;
+      line-height: 1.4;
+    }
+    .game-notification {
+      position: absolute;
+      top: 15px; left: 50%;
+      transform: translateX(-50%) translateY(-20px);
+      background: rgba(15, 23, 42, 0.95);
+      border: 2px solid #22c55e;
+      color: #22c55e;
+      padding: 10px 24px;
+      border-radius: 12px;
+      font-family: "Fredoka", sans-serif;
+      font-size: 1.1rem;
+      box-shadow: 0 10px 25px rgba(0,0,0,0.5);
+      opacity: 0; pointer-events: none;
+      transition: all 0.3s ease; z-index: 20;
+    }
+    .game-notification.show { opacity: 1; transform: translateX(-50%) translateY(0); }
+    .game-notification.error { border-color: #ef4444; color: #ef4444; }
+    .canvas-container {
+      width: 100%; height: 190px;
+      background: radial-gradient(circle at center, #1e130a 0%, #0d0804 100%);
+      border: 1px dashed rgba(253, 224, 71, 0.3);
+      border-radius: 14px; margin-bottom: 15px; position: relative; overflow: hidden;
+    }
+    canvas { width: 100%; height: 100%; display: block; }
+    .controls-panel {
+      background: rgba(0, 0, 0, 0.3);
+      border-radius: 12px; padding: 12px; margin-bottom: 10px;
+      display: flex; flex-direction: column; align-items: center; gap: 10px;
+    }
+    .slider-info { font-size: 1rem; color: #fff; }
+    .game-slider { width: 80%; max-width: 380px; accent-color: #fde047; cursor: pointer; }
+    .action-btn {
+      background: linear-gradient(135deg, #f59e0b, #d97706);
+      color: #fff; border: none; padding: 10px 28px;
+      font-family: "Fredoka", sans-serif; font-size: 1.05rem;
+      border-radius: 12px; cursor: pointer; box-shadow: 0 5px 15px rgba(245, 158, 11, 0.4);
+      transition: all 0.2s ease;
+    }
+    .action-btn:hover { transform: scale(1.05); background: linear-gradient(135deg, #fbbf24, #d97706); }
+    .options-grid { display: grid; grid-template-columns: repeat(2, 1fr); gap: 10px; margin-top: 10px; }
+    .opt-btn {
+      background: rgba(253, 224, 71, 0.1); border: 1px solid rgba(253, 224, 71, 0.3);
+      color: #fff; padding: 12px; border-radius: 12px; font-family: "Fredoka", sans-serif;
+      font-size: 0.95rem; cursor: pointer; transition: all 0.2s;
+    }
+    .opt-btn:hover { background: rgba(253, 224, 71, 0.25); border-color: #fde047; transform: translateY(-2px); }
+  </style>
+</head>
+<body class="castle-library-theme">
+
+  <div class="library-bg"><div class="sunlight-rays"></div></div>
+  <div class="floating-formulas" id="formulasContainer"></div>
+
+  <main class="main-screen">
+    <header class="game-logo-container">
+      <div class="logo-badge" id="levelBadge">Nivelul 1</div>
+      <h1 class="game-title">
+        <span class="word-newton" id="levelMainName">SALA</span>
+        <span class="word-adventure" id="levelSubName">KINEMATICICII</span>
+      </h1>
+    </header>
+
+    <div class="game-arena" id="gameArena">
+      <div id="gameNotification" class="game-notification">Cu succes!</div>
+    </div>
+
+    <div class="wiki-back-container">
+      <button class="menu-btn btn-back" onclick="navigateTo('levels.html')">
+        <div class="btn-icon"><i class="fa-solid fa-arrow-left"></i></div>
+        <div class="btn-text">
+          <span class="title">INAPOI</span>
+          <span class="subtitle">La harta nivelurilor</span>
+        </div>
+      </button>
+    </div>
+
+    <footer class="game-footer">
+     V1.0.0 Copyright © 2026 Maxim Burinschi & Arina Aftanas. All rights reserved.
+    </footer>
+  </main>
+
+  <script src="main.js"></script>
+  <script>
+    const urlParams = new URLSearchParams(window.location.search);
+    const currentLevel = parseInt(urlParams.get('num') || '1', 10);
+    let animId = null;
+
+    document.addEventListener("DOMContentLoaded", () => {
+      loadLevelContent(currentLevel);
+    });
+
+    function showNotification(text, isError = false) {
+      const notif = document.getElementById('gameNotification');
+      if (!notif) return;
+      notif.textContent = text;
+      notif.className = `game-notification show ${isError ? 'error' : ''}`;
+      setTimeout(() => { notif.className = 'game-notification'; }, 1800);
+    }
+
+    function loadLevelContent(lvl) {
+      const arena = document.getElementById('gameArena');
+      const badge = document.getElementById('levelBadge');
+      const mainName = document.getElementById('levelMainName');
+      const subName = document.getElementById('levelSubName');
+
+      badge.textContent = `Nivelul ${lvl}`;
+
+      if (lvl === 1) {
+        mainName.textContent = "SALA"; subName.textContent = "СINEMATICICII";
+        arena.innerHTML = `
+          <div id="gameNotification" class="game-notification">Cu succes!</div>
+          <div class="task-title">Ruperea casei de carti</div>
+          <div class="task-desc">Calculati viteza marul v = s / t, daca distanta s = 30 m, iar timpul t = 2 s. Lansati marul!</div>
+          <div class="canvas-container"><canvas id="simCanvas" width="750" height="190"></canvas></div>
+          <div class="controls-panel">
+            <div class="slider-info">Viteza: <span id="vVal" style="color: #fde047; font-weight: bold;">5</span> m/s</div>
+            <input type="range" min="1" max="25" value="5" class="game-slider" id="vSlider" oninput="document.getElementById('vVal').textContent = this.value">
+            <button class="action-btn" id="launchBtn" onclick="runLevel1Sim()">Lansati marul!</button>
+          </div>
+        `;
+        initLevel1Canvas();
+      } 
+      else if (lvl === 2) {
+        mainName.textContent = "TURNUL"; subName.textContent = "DINAMICII";
+        arena.innerHTML = `
+          <div id="gameNotification" class="game-notification">Cu succes!</div>
+          <div class="task-title">Deplasare cu catapulta</div>
+          <div class="task-desc">Calculati forța F = m * a, daca masa m = 2 kg, iar accelerația a = 10 m/s². Configurați catapulta!</div>
+          <div class="canvas-container"><canvas id="simCanvas" width="750" height="190"></canvas></div>
+          <div class="controls-panel">
+            <div class="slider-info">Puterea (F): <span id="fVal" style="color: #fde047; font-weight: bold;">5</span> N</div>
+            <input type="range" min="2" max="35" value="5" class="game-slider" id="fSlider" oninput="document.getElementById('fVal').textContent = this.value">
+            <button class="action-btn" id="launchBtn" onclick="runLevel2Sim()">Apasa pe tragaci!</button>
+          </div>
+        `;
+        initLevel2Canvas();
+      }
+      else if (lvl === 3) {
+        mainName.textContent = "BIBLIOTECA"; subName.textContent = "GRAVITAȚIEI";
+        arena.innerHTML = `
+          <div id="gameNotification" class="game-notification">Succes!</div>
+          <div class="task-title">Orbită stabilă</div>
+          <div class="task-desc">Calculați raza după formula r = v² / g, unde v = 12 m/s, iar g = 2.4 m/s². Setați raza!</div>
+          <div class="canvas-container"><canvas id="simCanvas" width="750" height="190"></canvas></div>
+          <div class="controls-panel">
+            <div class="slider-info">Raza (r): <span id="rVal" style="color: #fde047; font-weight: bold;">20</span></div>
+            <input type="range" min="10" max="100" value="20" class="game-slider" id="rSlider" oninput="document.getElementById('rVal').textContent = this.value">
+            <button class="action-btn" id="launchBtn" onclick="runLevel3Sim()">Lansează pe orbită!</button>
+          </div>
+        `;
+        initLevel3Canvas();
+      }
+      else if (lvl === 4) {
+        mainName.textContent = "PODUL"; subName.textContent = "ENERGIEI";
+        arena.innerHTML = `
+          <div id="gameNotification" class="game-notification">Succes!</div>
+          <div class="task-title">Impactul pendulului greu</div>
+          <div class="task-desc">Calculați energia după formula E = (m · v²) / 2, unde m = 2 kg, v = √45 m/s. Reglați pendulul!</div>
+          <div class="canvas-container"><canvas id="simCanvas" width="750" height="190"></canvas></div>
+          <div class="controls-panel">
+            <div class="slider-info">Energia: <span id="eVal" style="color: #fde047; font-weight: bold;">15</span> J</div>
+            <input type="range" min="5" max="80" value="15" step="5" class="game-slider" id="eSlider" oninput="document.getElementById('eVal').textContent = this.value">
+            <button class="action-btn" id="launchBtn" onclick="runLevel4Sim()">Eliberați pendulul!</button>
+          </div>
+        `;
+        initLevel4Canvas();
+      }
+      else if (lvl === 5) {
+        mainName.textContent = "EXAMENUL"; subName.textContent = "FINAL";
+        loadQuizQuestion(1);
+      }
+    }
+
+    // --- Логика уровня 1 ---
+    let sub1State = { appleX: 40, appleY: 140, appleAngle: 0, cardsDestroyed: false, cardParts: [] };
+    
+    function initLevel1Canvas() {
+      const canvas = document.getElementById('simCanvas');
+      if (!canvas) return;
+      const ctx = canvas.getContext('2d');
+      if (animId) cancelAnimationFrame(animId);
+      sub1State = { appleX: 40, appleY: 140, appleAngle: 0, cardsDestroyed: false, cardParts: [] };
+      ctx.clearRect(0, 0, canvas.width, canvas.height);
+      ctx.fillStyle = "#3d2314"; ctx.fillRect(0, 155, canvas.width, 35);
+      ctx.fillStyle = "#fde047"; ctx.fillRect(0, 153, canvas.width, 2);
+      
+      ctx.save();
+      ctx.translate(sub1State.appleX, sub1State.appleY);
+      ctx.font = "26px serif"; 
+      ctx.fillText("🍎", -12, 10);
+      ctx.restore();
+
+      ctx.font = "34px serif";
+      ctx.fillText("🃏", 620, 150); ctx.fillText("🃏", 650, 150); ctx.fillText("🃏", 635, 115);
+    }
+
+    function runLevel1Sim() {
+      const userSpeed = parseInt(document.getElementById('vSlider').value, 10);
+      const targetSpeed = 15;
+      const btn = document.getElementById('launchBtn');
+      btn.disabled = true;
+      const canvas = document.getElementById('simCanvas');
+      const ctx = canvas.getContext('2d');
+      let speedPx = userSpeed * 0.9;
+
+      function animate() {
+        ctx.clearRect(0, 0, canvas.width, canvas.height);
+        ctx.fillStyle = "#3d2314"; ctx.fillRect(0, 155, canvas.width, 35);
+        ctx.fillStyle = "#fde047"; ctx.fillRect(0, 153, canvas.width, 2);
+
+        if (sub1State.appleX < 615) {
+          sub1State.appleX += speedPx;
+          sub1State.appleAngle += speedPx * 0.08; // Вращение яблока при качении
+        } else if (!sub1State.cardsDestroyed) {
+          if (userSpeed === targetSpeed) {
+            sub1State.cardsDestroyed = true;
+            sub1State.cardParts = [
+              { x: 620, y: 140, vx: 4, vy: -6, rot: 0 },
+              { x: 650, y: 140, vx: 7, vy: -4, rot: 0 },
+              { x: 635, y: 110, vx: 5, vy: -7, rot: 0 }
+            ];
+          } else { 
+            speedPx = 0; 
+          }
+        }
+
+        if (!sub1State.cardsDestroyed) {
+          ctx.font = "34px serif";
+          ctx.fillText("🃏", 620, 150); ctx.fillText("🃏", 650, 150); ctx.fillText("🃏", 635, 115);
+        } else {
+          sub1State.cardParts.forEach(p => {
+            ctx.save(); ctx.translate(p.x, p.y); ctx.rotate(p.rot);
+            ctx.font = "22px serif"; ctx.fillText("🃏", 0, 0); ctx.restore();
+            p.x += p.vx; p.y += p.vy; p.rot += 0.15;
+          });
+        }
+
+        // Отрисовка катящегося яблока с вращением
+        ctx.save();
+        ctx.translate(sub1State.appleX, sub1State.appleY);
+        ctx.rotate(sub1State.appleAngle);
+        ctx.font = "26px serif"; 
+        ctx.fillText("🍎", -12, 10);
+        ctx.restore();
+
+        if (sub1State.appleX < 615 || (sub1State.cardsDestroyed && sub1State.cardParts[0].y < 200)) {
+          animId = requestAnimationFrame(animate);
+        } else {
+          if (userSpeed === targetSpeed) {
+            showNotification("Cu succes!"); 
+            setTimeout(() => completeLevel(1), 1000);
+          } else {
+            showNotification("Viteză incorectă!", true); 
+            btn.disabled = false; 
+            initLevel1Canvas();
+          }
+        }
+      }
+      animate();
+    }
+
+    // --- Логика уровня 2 ---
+    let sub2X = 50, sub2AnimRunning = false;
+    function initLevel2Canvas() {
+      const canvas = document.getElementById('simCanvas');
+      if (!canvas) return;
+      const ctx = canvas.getContext('2d');
+      if (animId) cancelAnimationFrame(animId);
+      sub2X = 50; sub2AnimRunning = false;
+      ctx.clearRect(0, 0, canvas.width, canvas.height);
+      ctx.fillStyle = "#3d2314"; ctx.fillRect(0, 155, canvas.width, 35);
+      ctx.fillStyle = "#fde047"; ctx.fillRect(0, 153, canvas.width, 2);
+      ctx.font = "34px serif"; ctx.fillText("🏹", sub2X, 145); ctx.fillText("🎯", 630, 145);
+    }
+    function runLevel2Sim() {
+      const val = parseInt(document.getElementById('fSlider').value, 10);
+      const targetVal = 20;
+      const btn = document.getElementById('launchBtn');
+      if (sub2AnimRunning) return;
+      btn.disabled = true; sub2AnimRunning = true;
+      const canvas = document.getElementById('simCanvas');
+      const ctx = canvas.getContext('2d');
+      sub2X = 50;
+      let step = (val === targetVal) ? 12 : (val > targetVal ? 18 : 6);
+      let targetX = (val === targetVal) ? 630 : (val > targetVal ? 720 : 250);
+
+      function animate() {
+        ctx.clearRect(0, 0, canvas.width, canvas.height);
+        ctx.fillStyle = "#3d2314"; ctx.fillRect(0, 155, canvas.width, 35);
+        ctx.fillStyle = "#fde047"; ctx.fillRect(0, 153, canvas.width, 2);
+        if (sub2X < targetX) sub2X += step;
+        ctx.font = "34px serif"; ctx.fillText("🏹", 50, 145); ctx.fillText("🎯", 630, 145);
+        if (sub2X > 50 && sub2X < 650) ctx.fillText("➳", sub2X, 140);
+        if (sub2X < targetX) {
+          animId = requestAnimationFrame(animate);
+        } else {
+          if (val === targetVal) {
+            showNotification("Lovit!"); setTimeout(() => completeLevel(2), 1000);
+          } else {
+            showNotification(val > targetVal ? "Prea departe!" : "Prea aproape!", true);
+            btn.disabled = false; sub2AnimRunning = false; initLevel2Canvas();
+          }
+        }
+      }
+      animate();
+    }
+
+    // --- Логика уровня 3 (плавная орбита, падение на Землю или улет в космос) ---
+    let sub3Angle = 0, sub3AnimRunning = false;
+    let sub3AstX = 0, sub3AstY = 0, sub3CurrentRadius = 20, sub3Status = 'orbit';
+
+    function initLevel3Canvas() {
+      const canvas = document.getElementById('simCanvas');
+      if (!canvas) return;
+      const ctx = canvas.getContext('2d');
+      if (animId) cancelAnimationFrame(animId);
+      sub3AnimRunning = false;
+      sub3Angle = 0;
+      sub3Status = 'orbit';
+      sub3CurrentRadius = parseInt(document.getElementById('rSlider').value, 10);
+      
+      ctx.clearRect(0, 0, canvas.width, canvas.height);
+      
+      // Рисуем планету Земля по центру
+      ctx.font = "46px serif"; 
+      ctx.fillText("🌍", 352, 110);
+      
+      // Начальное положение астероида
+      let astX = 375 + Math.cos(sub3Angle) * sub3CurrentRadius * 1.2;
+      let astY = 95 + Math.sin(sub3Angle) * sub3CurrentRadius * 0.8;
+      ctx.font = "24px serif"; 
+      ctx.fillText("⚫", astX, astY);
+    }
+
+    function runLevel3Sim() {
+      const val = parseInt(document.getElementById('rSlider').value, 10);
+      const targetVal = 60;
+      const btn = document.getElementById('launchBtn');
+      if (sub3AnimRunning) return;
+      btn.disabled = true; 
+      sub3AnimRunning = true;
+      const canvas = document.getElementById('simCanvas');
+      const ctx = canvas.getContext('2d');
+      sub3Angle = 0;
+      sub3CurrentRadius = val;
+      let animStep = 0;
+
+      function animate() {
+        ctx.clearRect(0, 0, canvas.width, canvas.height);
+        
+        // Рисуем Землю
+        ctx.font = "46px serif"; 
+        ctx.fillText("🌍", 352, 110);
+
+        if (val === targetVal) {
+          // Идеальная стабильная орбита
+          let astX = 375 + Math.cos(sub3Angle) * val * 1.2;
+          let astY = 95 + Math.sin(sub3Angle) * val * 0.8;
+          ctx.font = "24px serif"; 
+          ctx.fillText("⚫", astX, astY);
+          sub3Angle += 0.04;
+          animStep++;
+
+          if (animStep > 120) { // Полный круг пройден успешно
+            showNotification("Succes!"); 
+            setTimeout(() => completeLevel(3), 1000);
+            return;
+          }
+        } 
+        else if (val < targetVal) {
+          // Слишком маленький радиус — астероид по спирали падает НА ЗЕМЛЮ
+          sub3CurrentRadius -= 0.3; // уменьшаем расстояние до планеты
+          let astX = 375 + Math.cos(sub3Angle) * sub3CurrentRadius * 1.2;
+          let astY = 95 + Math.sin(sub3Angle) * sub3CurrentRadius * 0.8;
+          
+          ctx.font = "24px serif"; 
+          ctx.fillText("⚫", astX, astY);
+          sub3Angle += 0.08;
+
+          if (sub3CurrentRadius <= 5) {
+            // Эффект столкновения / взрыва при падении
+            ctx.font = "32px serif";
+            ctx.fillText("💥", 365, 100);
+            showNotification("Prea aproape! A căzut pe Pământ.", true);
+            setTimeout(() => {
+              btn.disabled = false; 
+              sub3AnimRunning = false; 
+              initLevel3Canvas();
+            }, 1200);
+            return;
+          }
+        } 
+        else {
+          // Слишком большой радиус — астероид улетает в КОСМОС
+          sub3CurrentRadius += 0.8; // увеличиваем радиус
+          let astX = 375 + Math.cos(sub3Angle) * sub3CurrentRadius * 1.2;
+          let astY = 95 + Math.sin(sub3Angle) * sub3CurrentRadius * 0.8;
+          
+          ctx.font = "24px serif"; 
+          ctx.fillText("⚫", astX, astY);
+          sub3Angle += 0.05;
+
+          if (astX < -50 || astX > canvas.width + 50 || astY < -50 || astY > canvas.height + 50) {
+            showNotification("Prea departe! A zburat în cosmos.", true);
+            setTimeout(() => {
+              btn.disabled = false; 
+              sub3AnimRunning = false; 
+              initLevel3Canvas();
+            }, 1200);
+            return;
+          }
+        }
+
+        animId = requestAnimationFrame(animate);
+      }
+      animate();
+    }
+
+    // --- Логика уровня 4 (разрушение преграды при любой достаточной энергии) ---
+    let sub4AngleAnim = 0, sub4AnimRunning = false;
+    const pivotX = 375;
+    const pivotY = 10;
+    const ropeLength = 100;
+    const bobRadius = 16;
+    let sub4BarrierDestroyed = false;
+    let sub4BarrierPieces = [];
+
+    function initLevel4Canvas() {
+      const canvas = document.getElementById('simCanvas');
+      if (!canvas) return;
+      const ctx = canvas.getContext('2d');
+      if (animId) cancelAnimationFrame(animId);
+      sub4AnimRunning = false;
+      sub4BarrierDestroyed = false;
+      sub4BarrierPieces = [];
+      ctx.clearRect(0, 0, canvas.width, canvas.height);
+      
+      // Нить и груз в покое
+      ctx.strokeStyle = "#fde047"; ctx.lineWidth = 2;
+      ctx.beginPath(); ctx.moveTo(pivotX, pivotY); ctx.lineTo(pivotX, pivotY + ropeLength); ctx.stroke();
+      
+      ctx.fillStyle = "#475569"; ctx.beginPath();
+      ctx.arc(pivotX, pivotY + ropeLength, bobRadius, 0, Math.PI * 2);
+      ctx.fill(); ctx.lineWidth = 2; ctx.strokeStyle = "#94a3b8"; ctx.stroke();
+
+      // Преграда (заслонка)
+      ctx.fillStyle = "#d97706";
+      ctx.fillRect(440, 70, 14, 85);
+      ctx.fillStyle = "#fde047";
+      ctx.fillRect(443, 75, 8, 75);
+    }
+
+    function runLevel4Sim() {
+      const val = parseInt(document.getElementById('eSlider').value, 10);
+      const targetVal = 45;
+      const btn = document.getElementById('launchBtn');
+      if (sub4AnimRunning) return;
+      btn.disabled = true; sub4AnimRunning = true;
+      const canvas = document.getElementById('simCanvas');
+      const ctx = canvas.getContext('2d');
+      sub4AngleAnim = 0;
+      sub4BarrierDestroyed = false;
+      sub4BarrierPieces = [];
+
+      const maxAngle = (val / 80) * 1.2; 
+
+      function animate() {
+        ctx.clearRect(0, 0, canvas.width, canvas.height);
+        
+        let currentAngle = maxAngle * Math.sin(sub4AngleAnim);
+        let weightX = pivotX + ropeLength * Math.sin(currentAngle);
+        let weightY = pivotY + ropeLength * Math.cos(currentAngle);
+
+        // Столкновение с заслонкой в точке X ~ 425
+        if (weightX >= 425 && !sub4BarrierDestroyed) {
+          if (val >= targetVal) {
+            // Разрушение заслонки происходит и при 45 Дж, и если энергии больше!
+            sub4BarrierDestroyed = true;
+            let speedMultiplier = val > targetVal ? 1.5 : 1; // Если больше — осколки разлетаются быстрее
+            sub4BarrierPieces = [
+              { x: 440, y: 80, vx: 5 * speedMultiplier, vy: -6, rot: 0 },
+              { x: 440, y: 110, vx: 8 * speedMultiplier, vy: -3, rot: 0 },
+              { x: 440, y: 140, vx: 4 * speedMultiplier, vy: -7, rot: 0 }
+            ];
+          } else {
+            // Мало энергии — маятник отскакивает назад
+            sub4AngleAnim = Math.PI - sub4AngleAnim; 
+          }
+        }
+
+        // Отрисовка преграды или осколков
+        if (!sub4BarrierDestroyed) {
+          ctx.fillStyle = "#d97706";
+          ctx.fillRect(440, 70, 14, 85);
+          ctx.fillStyle = "#fde047";
+          ctx.fillRect(443, 75, 8, 75);
+        } else {
+          sub4BarrierPieces.forEach(p => {
+            ctx.save(); ctx.translate(p.x, p.y); ctx.rotate(p.rot);
+            ctx.fillStyle = "#d97706"; ctx.fillRect(-4, -15, 8, 30);
+            ctx.restore();
+            p.x += p.vx; p.y += p.vy; p.rot += 0.12;
+          });
+        }
+
+        // Отрисовка нити и маятника
+        ctx.strokeStyle = "#fde047"; ctx.lineWidth = 2;
+        ctx.beginPath(); ctx.moveTo(pivotX, pivotY); ctx.lineTo(weightX, weightY); ctx.stroke();
+
+        ctx.fillStyle = "#475569"; ctx.beginPath();
+        ctx.arc(weightX, weightY, bobRadius, 0, Math.PI * 2);
+        ctx.fill(); ctx.lineWidth = 2; ctx.strokeStyle = "#94a3b8"; ctx.stroke();
+        
+        sub4AngleAnim += 0.06;
+        
+        if (sub4AngleAnim < Math.PI * 3.5) {
+          animId = requestAnimationFrame(animate);
+        } else {
+          if (val === targetVal) {
+            showNotification("Succes!"); 
+            setTimeout(() => completeLevel(4), 1000);
+          } else if (val < targetVal) {
+            showNotification("Energie insuficientă!", true); // Недостаточно энергии
+            btn.disabled = false; sub4AnimRunning = false; initLevel4Canvas();
+          } else {
+            showNotification("Energie prea mare!", true); // Слишком много энергии
+            btn.disabled = false; sub4AnimRunning = false; initLevel4Canvas();
+          }
+        }
+      }
+      animate();
+    }
+
+    // Завершение обычных уровней (1-4)
+    function completeLevel(lvlNum) {
+      let maxUnlocked = parseInt(localStorage.getItem('maxUnlockedLevel') || '1', 10);
+      if (lvlNum >= maxUnlocked) {
+        localStorage.setItem('maxUnlockedLevel', lvlNum + 1);
+      }
+
+      // Проверяем: если пройдены все 4 уровня, выдаем 1-е достижение
+      if (lvlNum === 4) {
+        let achievements = JSON.parse(localStorage.getItem('unlockedAchievements') || '[]');
+        if (!achievements.includes('chapter_1')) {
+          achievements.push('chapter_1');
+          localStorage.setItem('unlockedAchievements', JSON.stringify(achievements));
+        }
+      }
+
+      navigateTo('levels.html');
+    }
+
+    // --- Уровень 5: Итоговый тест из 5 вопросов ---
+    function loadQuizQuestion(qIndex) {
+      const arena = document.getElementById('gameArena');
+      const questions = [
+        {
+          q: "1. Care este legea care afirmă că forța de opoziție este întotdeauna egală în modul și opusă în direcție acțiunii?",
+          opts: ["Legea a III-a a lui Newton", "Legea conservării energiei", "Legea gravitației universale", "Legea a I-a a lui Newton"],
+          correct: 0
+        },
+        {
+          q: "2. În ce unități ale Sistemului Internațional (SI) se măsoară lucrul mecanic?",
+          opts: ["Vati (W)", "Jouli (J)", "Newtoni (N)", "Pascali (Pa)"],
+          correct: 1
+        },
+        {
+          q: "3. Care este valoarea aproximativă a accelerației gravitaționale la suprafața Pământului?",
+          opts: ["9.8 m/s²", "5.0 m/s²", "12.4 m/s²", "1.6 m/s²"],
+          correct: 0
+        },
+        {
+          q: "4. Cum se calculează energia cinetică a unui corp?",
+          opts: ["E = m * c²", "E = m * v² / 2", "E = F * d", "E = m * g * h"],
+          correct: 1
+        },
+        {
+  q: "5. Ce ştiinţific a formulat cele trei legi ale mişcării şi legea gravitaţiei universale?",
+  opts: ["Albert Einstein", "Isaac Newton", "Galileo Galilei", "Nikola Tesla"], // <-- здесь была пропущена запятая
+  correct: 1
+},
+      ];
+
+      if (qIndex > 5) {
+        arena.innerHTML = `
+          <div id="gameNotification" class="game-notification">Cu succes!</div>
+          <div class="task-title" style="color: #22c55e;">Felicitari! Examenul a fost susținut cu succes!</div>
+          <div class="task-desc">Ați răspuns la toate cele 5 întrebări și ați obținut al doilea realizare «Marele Fizician»!</div>
+          <button class="action-btn" onclick="completeTest()" style="margin-top: 15px;">Revenire la hartă de niveluri</button>
+        `;
+        return;
+      }
+
+      let currentQ = questions[qIndex - 1];
+      let html = `
+        <div id="gameNotification" class="game-notification">Cu succes!</div>
+        <div class="task-title">Examenul final (${qIndex}/5)</div>
+        <div class="task-desc">${currentQ.q}</div>
+        <div class="options-grid">
+      `;
+
+      currentQ.opts.forEach((opt, idx) => {
+        let isCorrect = idx === currentQ.correct;
+        html += `<button class="opt-btn" onclick="answerQuiz(${qIndex}, ${isCorrect})">${opt}</button>`;
+      });
+
+      html += `</div>`;
+      arena.innerHTML = html;
+    }
+
+    function answerQuiz(qIndex, isCorrect) {
+      if (isCorrect) {
+        showNotification("Corect!");
+        setTimeout(() => loadQuizQuestion(qIndex + 1), 900);
+      } else {
+        showNotification("Incorect, încercați din nou.", true);
+      }
+    }
+
+    // Завершение теста (выдача 2-го достижения)
+    function completeTest() {
+      let achievements = JSON.parse(localStorage.getItem('unlockedAchievements') || '[]');
+      if (!achievements.includes('chapter_2')) {
+        achievements.push('chapter_2');
+        localStorage.setItem('unlockedAchievements', JSON.stringify(achievements));
+      }
+      navigateTo('levels.html');
+    }
+  </script>
+</body>
+</html>
